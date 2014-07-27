@@ -104,7 +104,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<FullHttpRequest>
 	 */
 
 	FullHttpResponse handleRequest( ChannelHandlerContext ctx, FullHttpRequest req ) {
-		QueryStringDecoder resource = new QueryStringDecoder( req.getUri() );
+		QueryStringDecoder resource = new QueryStringDecoder( req.uri() );
         String contentStr = req.content().toString(CharsetUtil.UTF_8);
 
 		if( resource.path().equals( "/login" ) ) {
@@ -123,7 +123,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<FullHttpRequest>
 			l.error( "Could not get DB Manager {} {}", e.getStackTrace(), e.getMessage() );
 		}
 		if( resource.path().equals( "/events" ) ) { 
-			if( req.getMethod() == HttpMethod.POST ) {
+			if( req.method() == HttpMethod.POST ) {
 				JSONArray events = new JSONArray( contentStr );
 				for( int i = 0, size = events.length(); i < size; i++ ) {
 					dbMgr.insertEvent( events.getJSONObject(i) );
@@ -137,7 +137,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<FullHttpRequest>
 	}
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, FullHttpRequest msg)
+	protected void messageReceived(ChannelHandlerContext ctx, FullHttpRequest msg)
 	{
 		assert msg instanceof LastHttpContent;
 		l.info("received request ! {} {}", msg, msg.content().toString(CharsetUtil.UTF_8));

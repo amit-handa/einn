@@ -29,10 +29,10 @@ public class RequestDecoder extends SimpleChannelInboundHandler<HttpObject>
 	}
 
 	@Override
-	protected void channelRead0(ChannelHandlerContext ctx, HttpObject httpObject) throws Exception
+	protected void messageReceived(ChannelHandlerContext ctx, HttpObject httpObject) throws Exception
 	{
 
-		DecoderResult result = httpObject.getDecoderResult();
+		DecoderResult result = httpObject.decoderResult();
 		if (!result.isSuccess())
 		{
 			throw new BadRequestException(result.cause());

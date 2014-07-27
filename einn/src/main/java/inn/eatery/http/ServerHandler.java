@@ -59,12 +59,12 @@ public class ServerHandler extends SimpleChannelInboundHandler<Request>
 	}
 
 	@Override
-	protected void channelRead0(final ChannelHandlerContext ctx, final Request request) throws IOException, InstantiationException, IllegalAccessException
+	protected void messageReceived(final ChannelHandlerContext ctx, final Request request) throws IOException, InstantiationException, IllegalAccessException
 	{
 		FullHttpRequest httpRequest = request.getHttpRequest();
         String path = getPath(request);
-		l.debug( "Received request for {} {}", path, httpRequest.getUri());
-		if (httpRequest.getMethod() != POST || !httpRequest.headers().contains("Content-type", "application/json", true))
+		l.debug( "Received request for {} {}", path, httpRequest.uri());
+		if (httpRequest.method() != POST || !httpRequest.headers().contains("Content-type", "application/json", true))
         {
 			sendBadRequest(ctx, request);
 			return;
@@ -190,7 +190,7 @@ public class ServerHandler extends SimpleChannelInboundHandler<Request>
 
 	private String getPath(Request request)
 	{
-		QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.getHttpRequest().getUri());
+		QueryStringDecoder queryStringDecoder = new QueryStringDecoder(request.getHttpRequest().uri());
 		return queryStringDecoder.path();
 	}
 }

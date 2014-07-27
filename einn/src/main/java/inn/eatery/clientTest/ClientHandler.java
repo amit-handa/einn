@@ -32,6 +32,7 @@ import io.netty.handler.codec.http.FullHttpRequest;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpContent;
 import io.netty.handler.codec.http.HttpHeaders;
+import io.netty.handler.codec.http.HttpHeaderUtil;
 import io.netty.handler.codec.http.HttpMethod;
 import io.netty.handler.codec.http.HttpObject;
 import io.netty.handler.codec.http.HttpResponse;
@@ -96,7 +97,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<HttpObject>
 	}
 
 	@Override
-	public void channelRead0(ChannelHandlerContext ctx, HttpObject msg)
+	public void messageReceived(ChannelHandlerContext ctx, HttpObject msg)
 	{
 		assert msg instanceof FullHttpResponse;
 		l.info( " Got a message from server !!! {}", msg);
@@ -106,8 +107,8 @@ public class ClientHandler extends SimpleChannelInboundHandler<HttpObject>
 		{
 			HttpResponse response = (HttpResponse) msg;
 
-			System.out.println("STATUS: " + response.getStatus());
-			System.out.println("VERSION: " + response.getProtocolVersion());
+			System.out.println("STATUS: " + response.status());
+			System.out.println("VERSION: " + response.protocolVersion());
 			System.out.println();
 
 			if (!response.headers().isEmpty())
@@ -122,7 +123,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<HttpObject>
 				System.out.println();
 			}
 
-			if (HttpHeaders.isTransferEncodingChunked(response))
+			if (HttpHeaderUtil.isTransferEncodingChunked(response))
 			{
 				System.out.println("CHUNKED CONTENT {");
 			}
