@@ -97,7 +97,7 @@ public class ClientHandler extends SimpleChannelInboundHandler<HttpObject>
 	}
 
 	@Override
-	public void messageReceived(ChannelHandlerContext ctx, HttpObject msg)
+	protected void messageReceived(ChannelHandlerContext ctx, HttpObject msg)
 	{
 		assert msg instanceof FullHttpResponse;
 		l.info( " Got a message from server !!! {}", msg);

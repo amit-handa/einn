@@ -79,7 +79,8 @@ public final class Foodie
 			// Make the connection attempt.
 			Channel ch = b.connect(host, port).sync().channel();
 
-			FoodieHandler.sendConnect( ch, FoodieHandler.connect );
+			l.info( "publishing mqtt conenct msg to server {}", FoodieHandler.connectMsg );
+			ch.writeAndFlush( FoodieHandler.connectMsg );
 
 			// Wait for the server to close the connection.
 			ch.closeFuture().sync();
